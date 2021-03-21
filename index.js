@@ -10,46 +10,46 @@ app.use(cors());
 app.use("/api", bodyParser.json(), router);
 app.use("/api", bodyParser.urlencoded({ extended: false }), router);
 
-let animal = {
+let todo = {
   list: [
-    { id: 09901, name: "moji", age: 5 },
-    { id: 09902, name: "yaki", age: 2 },
+    { id: 1, title: "Homework 1", status: "Not started yet" },
+    { id: 2, title: "Homework 2", status: "Not started yet" },
   ],
 };
 
 router
-  .route("/animal")
+  .route("/todo")
   .get((req, res) => {
-    res.send(animal.list);
+    res.send(todo);
   })
   .post((req, res) => {
     console.log(req.body);
-    let newAnimal = {};
-    //console.log(animal.list.length ? animal.list[animal.list.length - 1].id + 1 : 1);
-    newAnimal.id = animal.list.length
-      ? animal.list[animal.list.length - 1].id + 1
-      : 1;
-    newAnimal.name = req.body.name;
-    newAnimal.age = req.body.age;
-    animal = { list: [...animal.list, newAnimal] };
-    res.json(animal);
+    let newtodo = {};
+    //console.log(todo.list.length ? todo.list[todo.list.length - 1].id + 1 : 1);
+    newtodo.id = todo.list.length ? todo.list[todo.list.length - 1].id + 1 : 1;
+    newtodo.title = req.body.title;
+    newtodo.status = req.body.status;
+    todo = { list: [...todo.list, newtodo] };
+    res.json(todo);
   });
 
 router
-  .route("/animal/:id")
+  .route("/todo/:id")
   .get((req, res) => {
-    let id = animal.list.findIndex((item) => item.id == +req.params.id);
-    res.json(animal.list[id]);
+    let id = todo.list.findIndex((item) => item.id == +req.params.id);
+    res.json(todo.list[id]);
   })
   .put((req, res) => {
-    let id = animal.list.findIndex((item) => item.id == +req.params.id);
-    animal.list[id].name = req.body.name;
-    animal.list[id].age = req.body.age;
-    res.json(animal.list);
+    console.log(req.body.title);
+    console.log(req.body.status);
+    let id = todo.list.findIndex((item) => item.id == +req.params.id);
+    todo.list[id].title = req.body.title;
+    todo.list[id].status = req.body.status;
+    res.json(todo.list);
   })
   .delete((req, res) => {
-    animal.list = animal.list.filter((item) => +item.id !== +req.params.id);
-    res.json(animal.list);
+    todo.list = todo.list.filter((item) => +item.id !== +req.params.id);
+    res.json(todo.list);
   });
 
 app.listen(PORT, () => {
